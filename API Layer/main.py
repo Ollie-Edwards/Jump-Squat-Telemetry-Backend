@@ -7,43 +7,12 @@ import pandas as pd
 
 import pandas as pd
 import sqlite3
-import pickle
 
 from SensorController import SensorController
+from databaseController import DatabaseController
 # from dataAnalysis import analyseDataframe
 
 app = FastAPI()
-
-conn = sqlite3.connect("jumpData.db")
-cursor = conn.cursor()
-
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS jumps (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        atleteId INTEGER NOT NULL,
-        timestamp DATETIME NOT NULL DEFAULT (datetime('now', 'localtime')),
-        name TEXT NOT NULL,
-        dataframe BLOB NOT NULL,
-        duration REAL,
-               
-        takeoff_velocity REAL,
-        jump_height REAL,
-        flight_time_suvat REAL,
-        flight_time_measured REAL,
-        peak_net_accel REAL,
-        avg_net_accel REAL,
-        time_to_peak_force REAL,
-        peak_grf REAL,
-        avg_grf REAL,
-        impulse REAL,
-        avg_power REAL,
-        peak_power REAL,
-        peak_rfd REAL
-    )
-""")
-
-conn.commit()
-conn.close()
 
 # Allow CORS
 app.add_middleware(
@@ -54,6 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+db = DatabaseController()
+
 sensor = SensorController()
 sensor.connect()
 
@@ -63,16 +34,11 @@ class StartRecordingRequest(BaseModel):
 
 @app.post("/sensor/begin")
 def start_recording(req: StartRecordingRequest):
-    
-    recording = True
-
     thread = threading.Thread(target=sensor.beginRecording, args=(req.duration,))
     thread.start()
     thread.join()
 
     data = sensor.getSensorQueue()
-    print(data.qsize(), " samples in ", req.duration," seconds")
-    print(data.qsize()/req.duration,"Hz")
 
     data_list = []
     while not data.empty():
@@ -83,49 +49,20 @@ def start_recording(req: StartRecordingRequest):
     df["time"] = df["time"] - df.iloc[0]["time"]
 
     # save to database    
-    conn = sqlite3.connect("jumpData.db")
-    cursor = conn.cursor()
-    cursor.execute("""INSERT INTO jumps (
-                    atleteId,
-                    name,
-                    dataframe,
-                   duration
-                   )
-                   VALUES (?, ?, ?, ?)
-                   """, (
-                       1,
-                       req.name,
-                       pickle.dumps(df),
-                       req.duration
-                    )
-    )
-    conn.commit()
-    conn.close()
+    db.saveJumpData(1, req.name, df, req.duration)
 
     print(f"saved to database with name: {req.name}")
 
     return {"status": "success"}
 
 @app.get("/data/{id}")
-def get_data(id: int):
-
-    # Fetch the pickled dataframe from DB
-    conn = sqlite3.connect("jumpData.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT dataframe FROM jumps WHERE id = ?", (id,))
-    stored_pickle = cursor.fetchone()[0]
-    conn.commit()
-    conn.close()
-
-    # Unpickle (deserialize) to DataFrame
-    df = pickle.loads(stored_pickle)
-
-    return df
+def get_dataframe(id: int):
+    return db.getDataframe(id)
 
 @app.get("/graph/{name}")
 def get_graph(name: str):
 
-    return "results"
+    return {"status": "success"}
 
 @app.get("/index")
 def get_all():
