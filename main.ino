@@ -28,8 +28,8 @@ struct Sample {
 int counter = 0;
 
 // Setup circular buffer
-const int SAMPLE_RATE_HZ = 800;
-const int SEND_RATE_HZ = 80;
+const int SAMPLE_RATE_HZ = 1000;
+const int SEND_RATE_HZ = 100;
 const int BUFFER_SIZE = 1024;  // Must be > (SAMPLE_RATE_HZ / SEND_RATE_HZ)
 CircularBuffer<Sample, BUFFER_SIZE> sampleBuffer;
 
@@ -78,6 +78,13 @@ void handleIncomingPacket() {
       Serial.printf("send datapoints: %d\n", counter);
 
     }
+
+    else if (strcmp(incomingPacket, "Ping") == 0){
+      const char* reply = "Pong";
+      udp.beginPacket(udp.remoteIP(), udp.remotePort());
+      udp.write((const uint8_t*)reply, strlen(reply));
+      udp.endPacket();
+    }
   }
 }
 
@@ -96,6 +103,7 @@ void sendMPUData(){
     udp.endPacket();
   }
 }
+
 
 // read MPU6050 sample and buffer
 void readMPUSensor() {
@@ -128,7 +136,7 @@ void setup() {
   Serial.begin(115200);
 
   Wire.begin(21, 22);
-  Wire.setClock(500000);
+  Wire.setClock(1000000);
 
   if (!mpu.begin()) {
     Serial.println("MPU6050 not found!");
@@ -156,7 +164,7 @@ void loop() {
   unsigned long nowMicros = micros();
   unsigned long nowMillis = millis();
 
-  // If packet recieved, read it and potentially change status / mode
+  // If packet recieved, read it and potentially change mode
   handleIncomingPacket();
 
   if (nowMicros - lastSampleMicros >= 1000000UL / SAMPLE_RATE_HZ) {
