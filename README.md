@@ -28,4 +28,9 @@ Data is transmitted on a closed network via the UDP protocol, the high frequency
 
 # Database layer
 
+# Frontend
+
+Aee code here: https://github.com/Ollie-Edwards/Jump-Squat-Telemetry-Frontend
+
+# Future improvements / Features
 
