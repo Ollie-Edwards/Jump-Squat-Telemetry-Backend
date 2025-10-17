@@ -43,12 +43,6 @@ class DatabaseController():
                 )
             """)
             conn.commit()
-
-    def get_all_users(self):
-        with self.get_conn() as conn:
-            cur = conn.cursor()
-            cur.execute("SELECT id, name FROM users")
-            return [{"id": r[0], "name": r[1]} for r in cur.fetchall()]
         
     def saveJumpData(self, athleteId: int, name: str, df, duration: float):
         with self.get_conn() as conn:
@@ -76,4 +70,5 @@ class DatabaseController():
             cursor.execute("SELECT dataframe FROM jumps WHERE id = ?", (id,))
             stored_pickle = cursor.fetchone()[0]
 
-            return pickle.loads(stored_pickle)
+            df = pickle.loads(stored_pickle)
+            return df
