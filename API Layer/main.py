@@ -10,7 +10,7 @@ import sqlite3
 
 from SensorController import SensorController
 from databaseController import DatabaseController
-# from dataAnalysis import analyseDataframe
+from dataAnalysis import analyseDataframe
 
 app = FastAPI()
 
@@ -40,13 +40,8 @@ def start_recording(req: StartRecordingRequest):
 
     data = sensor.getSensorQueue()
 
-    data_list = []
-    while not data.empty():
-        data_list.append(data.get())
-
     # save to df
-    df = pd.DataFrame(data_list, columns=["time", "ax", "ay", "az", "gx", "gy", "gz"])
-    df["time"] = df["time"] - df.iloc[0]["time"]
+    df = pd.DataFrame(data, columns=["time", "ax", "ay", "az", "gx", "gy", "gz"])
 
     # save to database    
     db.saveJumpData(1, req.name, df, req.duration)
@@ -57,12 +52,9 @@ def start_recording(req: StartRecordingRequest):
 
 @app.get("/data/{id}")
 def get_dataframe(id: int):
-    return db.getDataframe(id)
+    df = db.getDataframe(id)
 
-@app.get("/graph/{name}")
-def get_graph(name: str):
-
-    return {"status": "success"}
+    return analyseDataframe(df)
 
 @app.get("/index")
 def get_all():
@@ -72,4 +64,23 @@ def get_all():
     rows = cursor.fetchall()
     conn.close()
 
-    return {"results": rows}
+    results = [
+        {
+            "id": row[0],
+            "athleteId": row[1],
+            "date": row[2],
+            "name": row[3],
+            "duration": row[4]
+        }
+        for row in rows
+    ]
+
+    print(results)
+
+    return results
+
+@app.get("/ping")
+def get_all():
+    connected = sensor.pingSensor()
+
+    return connected
