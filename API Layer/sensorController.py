@@ -7,7 +7,7 @@ class SensorController():
     def __init__(self):
         self.UDP_IP = "192.168.4.1"
         self.UDP_PORT = 4210
-        self.dataQueue = queue.Queue()
+        self.sensorData = []
 
         self.recording = False
         self.connected = False
@@ -33,7 +33,6 @@ class SensorController():
                 self.connected = False
             
             counter += 1
-            time.sleep(1)
             
         if self.connected:
             print(f"Connected to sensor at {self.UDP_IP}:{self.UDP_PORT}...")
@@ -44,14 +43,14 @@ class SensorController():
             return False
         
     def pingSensor(self):
+        if self.recording: return True
+
         self.sock.settimeout(0.5)
         self.sock.sendto(b"Ping", (self.UDP_IP, self.UDP_PORT)) 
         print(f"Sending ping to {self.UDP_IP}:{self.UDP_PORT}")
 
         try:
             data, addr = self.sock.recvfrom(1024)
-            # if ping?
-            print("Received ping")
             self.connected = True
             return True
         
@@ -65,10 +64,13 @@ class SensorController():
             self.sock.settimeout(None)
 
     def getSensorQueue(self):
-        return self.dataQueue
+        data = self.sensorData
+        self.sensorData = []
+        return data
 
     def beginRecording(self, duration: float):
         if self.recording:
+            print("already recording")
             return False
 
         if not self.pingSensor():
@@ -96,7 +98,7 @@ class SensorController():
                     chunk = data[i:i+sample_size]
                     if len(chunk) == sample_size:
                         line = struct.unpack(fmt, chunk)
-                        self.dataQueue.put(line)
+                        self.sensorData.append(line)
 
             except socket.timeout:
                 print("Socket timed out")
