@@ -1,12 +1,18 @@
-# Jump-Squat-Telemetry
+# Jump Squat Telemetry
 
-This project aims to **record, analyze, and display** accelerometer based sensor data to measure **athlete performance metrics** such as peak force, peak acceleration, rate of force development (RFD) and many other statistics. This data is usually only available using expensive force plates which can cost thousands of pounds, and are not accessible to the majority of athletes, this project seeks to make this technology and insight widely accessible at a low cost.
+This project aims to **record, analyze, and display accelerometer-based sensor data** to measure athlete performance metrics such as **peak force**, **peak acceleration**, **rate of force development (RFD)**, and many other statistics. This kind of data is usually only available using **expensive force plates**, which can cost thousands of pounds and are not accessible to the majority of athletes. This project seeks to make this technology and insight **widely accessible at a low cost**.
 
-It provides a complete end-to-end IoT data acquisition and processing system built with ESP32, FastAPI, and SQLite, connected to a modern React.js and Typescript front end, to display data to the athlete/coaches.
+It provides a complete end-to-end **IoT data acquisition and processing system**, including:
+* **Data acquisition** using an **ESP32 microcontroller** paired with **accelerometer sensors**, capturing real-time movement data.
+* **Data transmission and processing** through a **FastAPI backend**, storing and analyzing the information in a lightweight **SQLite database**.
+* **Data visualization** with a **modern React.js and TypeScript frontend**, allowing athletes and coaches to view performance metrics, track improvements, and explore trends over time.
+    
+By combining affordable hardware, robust backend processing, and an intuitive frontend dashboard, this project brings elite-level performance measurement tools normally only available in sports science labs to any athlete, anywhere.
+
 
 ## Note
 1) This project is still a work in progress, and I am still working on cleaning up the code, writing tests and adding a large number of features when I have time alongside my studies.
-2) This repo only includes code for the hardware and API layer of the project, for front end code please see link
+2) This repo only includes code for the hardware and API layer of the project, for front end code please see the following repo: https://github.com/Ollie-Edwards/Jump-Squat-Telemetry-Frontend
 
 # Project Architecture
 
@@ -30,7 +36,19 @@ Data is transmitted on a closed network via the UDP protocol, the high frequency
 
 # Frontend
 
-Aee code here: https://github.com/Ollie-Edwards/Jump-Squat-Telemetry-Frontend
+|     |  |
+| -------- | ------- |
+| <img width="1254" height="1284" alt="image" src="https://github.com/user-attachments/assets/905e940f-496a-4b75-85d4-64ed2306f4b1" /> | <img width="694" height="727" alt="image" src="https://github.com/user-attachments/assets/379009d2-f0f0-482c-af60-fcdd7fa86f09" />
+
+ |
+
+|     |  |
+| -------- | ------- |
+| <img width="1262" height="1303" alt="image" src="https://github.com/user-attachments/assets/ca2c3f3c-a9f8-42a2-9a3e-79d00059caab" />
+  | <img width="1265" height="1301" alt="image" src="https://github.com/user-attachments/assets/7264c865-e0f6-4eb2-a2a6-154b7953bb2b" />
+    |
+
+See code here: https://github.com/Ollie-Edwards/Jump-Squat-Telemetry-Frontend
 
 # Future improvements / Features
 
