@@ -34,6 +34,8 @@ Data is transmitted on a closed network via the UDP protocol, the high frequency
 
 # Database layer
 
+<img width="852" height="122" alt="Untitled Diagram drawio (2)" src="https://github.com/user-attachments/assets/e5606489-d2f7-4167-800a-668429e1eef9" />
+
 # Frontend
 
 |     |  |
