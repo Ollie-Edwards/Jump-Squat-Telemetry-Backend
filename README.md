@@ -36,17 +36,19 @@ Data is transmitted on a closed network via the UDP protocol, the high frequency
 
 # Frontend
 
-|     |  |
+|          |         |
 | -------- | ------- |
 | <img width="1254" height="1284" alt="image" src="https://github.com/user-attachments/assets/905e940f-496a-4b75-85d4-64ed2306f4b1" /> | <img width="694" height="727" alt="image" src="https://github.com/user-attachments/assets/379009d2-f0f0-482c-af60-fcdd7fa86f09" />
 
- |
 
-|     |  |
+|          |         |
 | -------- | ------- |
-| <img width="1262" height="1303" alt="image" src="https://github.com/user-attachments/assets/ca2c3f3c-a9f8-42a2-9a3e-79d00059caab" />
-  | <img width="1265" height="1301" alt="image" src="https://github.com/user-attachments/assets/7264c865-e0f6-4eb2-a2a6-154b7953bb2b" />
-    |
+|<img width="1265" height="1305" alt="image" src="https://github.com/user-attachments/assets/0bfb03b8-3461-43ef-b0b4-5ae241b2a5b8" /> | <img width="1278" height="1301" alt="image" src="https://github.com/user-attachments/assets/34db0d9b-4dc9-4925-a620-36eabcf33658" />
+
+|          |         |
+| -------- | ------- |
+<img width="1277" height="1299" alt="image" src="https://github.com/user-attachments/assets/f597218d-6120-41ef-bb41-3d7bdf43040d" /> | 
+
 
 See code here: https://github.com/Ollie-Edwards/Jump-Squat-Telemetry-Frontend
 
