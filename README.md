@@ -30,6 +30,33 @@ Data is transmitted on a closed network via the UDP protocol, the high frequency
 | -------- | ------- |
 | ![IMG_6790](https://github.com/user-attachments/assets/11599636-06c3-4c4a-9b0d-13ccc40465f0)  | ![IMG_6793](https://github.com/user-attachments/assets/87f0e1ad-aafe-4ff7-9266-9b840058762a)    |
 
+# CI/CD
+## Code Quality, Formatting and Linting
+
+This project uses **GitHub Actions** and **Super-Linter** to enforce consistent code quality and formatting across Python, C++, Arduino (`.ino`), and Markdown files.
+
+### Linting and Formatting Rules
+
+- **Python**
+  - Formatted and checked using **Black**
+- **C++** / .ino
+  - Formatted using **clang-format**
+- **Markdown**
+  - Formatted automatically with **Prettier**
+- Other linters are intentionally disabled to focus only on these file types.
+
+### Workflow Overview
+
+- Runs on `push` events
+- Checks all relevant files for formatting issues
+- Generates a summary report of linting results
+- Auto-formatting can be applied for Python, C++, and Markdown files
+
+### Benefits
+
+- Ensures consistent code style across contributors
+- Prevents style-related issues from reaching the main branch
+
 # API and application layer
 
 # Database layer
