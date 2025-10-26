@@ -27,22 +27,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  format-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
+  # Black is included in super linter
+  # format-check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v5
 
-        # ---- Python formatting (Black) ----
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+  #       # ---- Python formatting (Black) ----
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.12'
 
-      - name: Install Black
-        run: pip install black
+  #     - name: Install Black
+  #       run: pip install black
 
-      - name: Check Python formatting
-        run: |
-          black --diff --color .
-          black --check .
+  #     - name: Check Python formatting
+  #       run: |
+  #         black --diff --color .
+  #         black --check .
