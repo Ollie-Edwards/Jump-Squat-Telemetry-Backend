@@ -1,8 +1,8 @@
-#include <WiFi.h>
-#include <WiFiUdp.h>
-#include <WebSocketsServer.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
+#include <WebSocketsServer.h>
+#include <WiFi.h>
+#include <WiFiUdp.h>
 #include <Wire.h>
 
 #include <CircularBuffer.hpp>
@@ -30,7 +30,7 @@ int counter = 0;
 // Setup circular buffer
 const int SAMPLE_RATE_HZ = 1000;
 const int SEND_RATE_HZ = 100;
-const int BUFFER_SIZE = 1024;  // Must be > (SAMPLE_RATE_HZ / SEND_RATE_HZ)
+const int BUFFER_SIZE = 1024; // Must be > (SAMPLE_RATE_HZ / SEND_RATE_HZ)
 CircularBuffer<Sample, BUFFER_SIZE> sampleBuffer;
 
 unsigned long lastSampleMicros = 0;
@@ -49,29 +49,27 @@ void beep(int time) {
 
 void handleIncomingPacket() {
   int packetSize = udp.parsePacket();
-  if (packetSize)
-  {
+  if (packetSize) {
     int len = udp.read(incomingPacket, 255);
 
     // Add string terminator
     if (len > 0)
       incomingPacket[len] = 0;
 
-    if (debug){
-      Serial.printf("Received from %s:%d\n",
-        udp.remoteIP().toString().c_str(),
-        udp.remotePort());
+    if (debug) {
+      Serial.printf("Received from %s:%d\n", udp.remoteIP().toString().c_str(),
+                    udp.remotePort());
       Serial.printf("Message: %s\n", incomingPacket);
     }
 
-    if (strcmp(incomingPacket, "Begin") == 0){
+    if (strcmp(incomingPacket, "Begin") == 0) {
       beep(500);
       Serial.printf("Set status to 1");
       status = 1;
       counter = 0;
     }
 
-    else if (strcmp(incomingPacket, "End") == 0){
+    else if (strcmp(incomingPacket, "End") == 0) {
       beep(500);
       Serial.printf("Set status to 0");
       status = 0;
@@ -79,16 +77,16 @@ void handleIncomingPacket() {
 
     }
 
-    else if (strcmp(incomingPacket, "Ping") == 0){
-      const char* reply = "Pong";
+    else if (strcmp(incomingPacket, "Ping") == 0) {
+      const char *reply = "Pong";
       udp.beginPacket(udp.remoteIP(), udp.remotePort());
-      udp.write((const uint8_t*)reply, strlen(reply));
+      udp.write((const uint8_t *)reply, strlen(reply));
       udp.endPacket();
     }
   }
 }
 
-void sendMPUData(){
+void sendMPUData() {
   const int samplesPerPacket = SAMPLE_RATE_HZ / SEND_RATE_HZ;
   Sample packet[samplesPerPacket];
   int count = 0;
@@ -99,18 +97,17 @@ void sendMPUData(){
 
   if (count > 0) {
     udp.beginPacket(udp.remoteIP(), udp.remotePort());
-    udp.write((uint8_t*)packet, count * sizeof(Sample));
+    udp.write((uint8_t *)packet, count * sizeof(Sample));
     udp.endPacket();
   }
 }
-
 
 // read MPU6050 sample and buffer
 void readMPUSensor() {
   sensors_event_t a, g, temp_event;
   mpu.getEvent(&a, &g, &temp_event);
 
-  counter  = counter + 1;
+  counter = counter + 1;
 
   Sample s;
   s.timestamp_ms = millis();
@@ -125,10 +122,10 @@ void readMPUSensor() {
   if (!sampleBuffer.isFull()) {
     sampleBuffer.push(s);
   } else {
-    sampleBuffer.shift();  // drop oldest
+    sampleBuffer.shift(); // drop oldest
     sampleBuffer.push(s);
   }
-} 
+}
 
 void setup() {
   pinMode(buzzerPin, OUTPUT);
@@ -140,7 +137,8 @@ void setup() {
 
   if (!mpu.begin()) {
     Serial.println("MPU6050 not found!");
-    while (1) delay(10);
+    while (1)
+      delay(10);
   }
 
   // Start ESP32 as an access point
@@ -173,7 +171,7 @@ void loop() {
   }
 
   // Send data
-  if (status == 1 && (nowMillis - lastSendMillis >= 1000/SEND_RATE_HZ)) {
+  if (status == 1 && (nowMillis - lastSendMillis >= 1000 / SEND_RATE_HZ)) {
     lastSendMillis = nowMillis;
     sendMPUData();
   }
