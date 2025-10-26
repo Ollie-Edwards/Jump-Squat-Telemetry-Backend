@@ -31,5 +31,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: reiddraper/prettier-please@v0.0.1
-      - with:
+        with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
