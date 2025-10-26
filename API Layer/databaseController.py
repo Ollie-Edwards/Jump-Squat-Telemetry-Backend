@@ -2,7 +2,8 @@ import sqlite3
 from contextlib import contextmanager
 import pickle
 
-class DatabaseController():
+
+class DatabaseController:
     def __init__(self):
         self.name = "jumpData.db"
         self.createTables()
@@ -18,7 +19,8 @@ class DatabaseController():
     def createTables(self):
         with self.get_conn() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute(
+                """
                 CREATE TABLE IF NOT EXISTS jumps (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     atleteId INTEGER NOT NULL,
@@ -41,13 +43,15 @@ class DatabaseController():
                     peak_power REAL,
                     peak_rfd REAL
                 )
-            """)
+            """
+            )
             conn.commit()
-        
+
     def saveJumpData(self, athleteId: int, name: str, df, duration: float):
         with self.get_conn() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO jumps (
                     atleteId,
                     name,
@@ -55,12 +59,8 @@ class DatabaseController():
                     duration
                 )
                     VALUES (?, ?, ?, ?)
-                """, (
-                    athleteId,
-                    name,
-                    pickle.dumps(df),
-                    duration
-                )
+                """,
+                (athleteId, name, pickle.dumps(df), duration),
             )
             conn.commit()
 

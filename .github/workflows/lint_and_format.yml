@@ -26,7 +26,15 @@ jobs:
         uses: super-linter/super-linter@v7.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # Disable all auto-detection
+          VALIDATE_ALL_CODEBASE: false
+          # Python
+          VALIDATE_PYTHON_BLACK: true
+          # C++
           VALIDATE_CPP_CLANG_FORMAT: true
+          # Markdown
+          VALIDATE_MARKDOWN_PRETTIER: true
 
   # Black is included in super linter
   # format-check:

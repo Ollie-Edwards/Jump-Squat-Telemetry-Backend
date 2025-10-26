@@ -28,9 +28,11 @@ db = DatabaseController()
 sensor = SensorController()
 sensor.connect()
 
+
 class StartRecordingRequest(BaseModel):
     duration: float
     name: str
+
 
 @app.post("/sensor/begin")
 def start_recording(req: StartRecordingRequest):
@@ -43,12 +45,13 @@ def start_recording(req: StartRecordingRequest):
     # save to df
     df = pd.DataFrame(data, columns=["time", "ax", "ay", "az", "gx", "gy", "gz"])
 
-    # save to database    
+    # save to database
     db.saveJumpData(1, req.name, df, req.duration)
 
     print(f"saved to database with name: {req.name}")
 
     return {"status": "success"}
+
 
 @app.get("/data/{id}")
 def get_dataframe(id: int):
@@ -56,11 +59,14 @@ def get_dataframe(id: int):
 
     return analyseDataframe(df)
 
+
 @app.get("/index")
 def get_all():
     conn = sqlite3.connect("jumpData.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, atleteId, timestamp, name, duration FROM jumps ORDER BY timestamp DESC")
+    cursor.execute(
+        "SELECT id, atleteId, timestamp, name, duration FROM jumps ORDER BY timestamp DESC"
+    )
     rows = cursor.fetchall()
     conn.close()
 
@@ -70,7 +76,7 @@ def get_all():
             "athleteId": row[1],
             "date": row[2],
             "name": row[3],
-            "duration": row[4]
+            "duration": row[4],
         }
         for row in rows
     ]
@@ -78,6 +84,7 @@ def get_all():
     print(results)
 
     return results
+
 
 @app.get("/ping")
 def get_all():
