@@ -22,10 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Treat INO files as CPP
-        run: |
-          find . -name "*.ino" -exec sh -c 'mv "$0" "${0%.ino}.cpp"' {} \;
-      
       - name: Super-Linter
         uses: super-linter/super-linter@v7.1.0
         env:
