@@ -30,6 +30,14 @@ jobs:
   format-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: creyD/prettier_action@v4.6
+        # ---- Python formatting (Black) ----
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          python-version: '3.12'
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Check Python formatting
+        run: black --check .
