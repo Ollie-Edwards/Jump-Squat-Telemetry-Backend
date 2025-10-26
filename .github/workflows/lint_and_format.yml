@@ -30,6 +30,6 @@ jobs:
   format-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: reiddraper/prettier-please@v0.0.1
+      - uses: creyD/prettier_action@v4.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
