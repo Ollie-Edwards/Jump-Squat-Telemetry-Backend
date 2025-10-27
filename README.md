@@ -63,6 +63,8 @@ This project uses **GitHub Actions** and **Super-Linter** to enforce consistent 
 
 # Database layer
 
+<img width="852" height="122" alt="Untitled Diagram drawio (2)" src="https://github.com/user-attachments/assets/e5606489-d2f7-4167-800a-668429e1eef9" />
+
 # Frontend
 
 |                                                                                                                                      |                                                                                                                                    |
